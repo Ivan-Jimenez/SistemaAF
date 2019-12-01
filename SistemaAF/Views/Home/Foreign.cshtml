@@ -1,0 +1,475 @@
+﻿
+
+<div ng-controller="foreign-controller">
+
+    @* ///////////////////////////////////// LISTA DE NUMEROS /////////////////////////////////////////////// *@
+
+    <div class="index animated fadeInDown slow">
+        <h3>Extranjeros</h3>
+        <hr />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-lg-1 align-content-md-end">
+                    <ion-icon name="search" size="large"></ion-icon>
+                </div>
+                <div class="col-lg-4 ">
+                    <input type="search" class="form-control width-box " placeholder="Buscar..." ng-model="search" />
+                </div>
+
+                <div class="col-lg-6">
+                    @*<center>
+                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal" ng-click="loadLayout(1)">Planta 1</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal" ng-click="loadLayout(2)">Planta 2</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal" ng-click="loadLayout(3)">Planta 3</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal" ng-click="loadLayout(4)">Planta 4</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal" ng-click="loadLayout(5)">Planta 5</button>
+                        </div>
+                    </center>*@
+                </div>
+
+                <div class="col-lg-1">
+                    <button type="button" class="btn btn-azul" data-toggle="modal" data-target="#foreignModal" ng-click="cleanForeign()">
+                        <ion-icon name="add"></ion-icon>Nuevo
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+                <div class="table-responsive overflow-auto" style="height: 500px;">
+                    <table class="table table-sm table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="info-header"># Factura</th>
+                                <th class="info-header">Fecha Imp.</th>
+                                <th class="info-header">Costo Aduanas</th>
+                                <th class="info-header">División</th>
+                                <th class="info-header"># Serie</th>
+                                <th class="info-header">Pedimento</th>
+                                <th class="info-header">Localización</th>
+                                <th class="info-header"># Activo(Mex)</th>
+                                <th class="info-header"># Activo(Ext)</th>
+                                <th class="info-header">Marca</th>
+                                <th class="info-header">Modelo</th>
+                                <th class="info-header">Desc.</th>
+                                <th class="info-header"></th>
+                                <th class="info-header"></th>
+                                <th class="info-header"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            <tr ng-repeat="item in foreigns | filter : search">
+                                <td class="info-table">
+                                    <span class="info-span">
+                                        <ion-icon name="logo-buffer"></ion-icon> {{item.no_factura}}
+                                    </span>
+                                </td>
+                                <td class="info-table">{{item.Fecha}}</td>
+                                <td class="info-table">{{item.costo_aduanas}}</td>
+                                <td class="info-table">{{item.Division}}</td>
+                                <td class="info-table">{{item.Serie}}</td>
+                                <td class="info-table">{{item.Pedimento}}</td>
+                                <td class="info-table">{{item.Location}}</td>
+                                <td class="info-table">{{item.no_activo_mex}}</td>
+                                <td class="info-table">{{item.no_activo_ext}}</td>
+                                <td class="info-table">{{item.Marca}}</td>
+                                <td class="info-table">{{item.Modelo}}</td>
+                                <td class="info-table">{{item.desc}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-azul" data-toggle="modal" data-placement="top" data-target="#caratulaModal" title="Ver" ng-click="assetInfo(item.NoParte)">
+                                        <ion-icon name="eye"></ion-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-verde" data-placement="top" title="Editar" data-toggle="modal" data-target="#foreignModal" ng-click="selectForeign(item.NoParte)">
+                                        <ion-icon name="create"></ion-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-rojo" data-toggle="tooltip" data-placement="top" title="Eliminar" ng-click="deleteForeing(item.NoParte)">
+                                        <ion-icon name="trash"></ion-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+            <!-- Modal -->
+
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-naranja" data-toggle="modal" data-target="#fileModal"><ion-icon name="cloud-upload">   </ion-icon> Upload   </button>
+            <button class="btn btn-verde" ng-click="downloadForeignData()"><ion-icon name="cloud-download"></ion-icon> Download</button>
+        </div>
+    </div>
+    <div class="modal fade" id="foreignModal" tabindex="-1" role="dialog" aria-labelledby="foreignModalLabel" aria-hidden="true" autofocus>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" ng-model="modal_title" id="foreignModalLabel">+Nuevo Activo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <center>
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" id="p1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Planta 1
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="p1">
+                                        <button class="dropdown-item" onclick="loadLayout(1)">Plano A</button>
+                                        <button class="dropdown-item" onclick="loadLayout(12)">Plano B</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-info" onclick="loadLayout(2)">Planta 2</button>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" id="p3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Planta 3
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="p3">
+                                        <button class="dropdown-item" onclick="loadLayout(3)">Plano A</button>
+                                        <button class="dropdown-item" onclick="loadLayout(31)">Plano B</button>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" id="p3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Planta 3
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="p3">
+                                        <button class="dropdown-item" onclick="loadLayout(3)">Plano A</button>
+                                        <button class="dropdown-item" onclick="loadLayout(31)">Plano B</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-info" onclick="loadLayout(4)">Planta 5</button>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" id="p5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Planta 5
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="p5">
+                                        <button class="dropdown-item" onclick="loadLayout(5)">Plano A</button>
+                                        <button class="dropdown-item" onclick="loadLayout(51)">Plano B</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </center>
+                    </div>
+
+                    <div class="container-fluid">
+                        <form name="foreignForm" novalidate>
+                            <div class="form-card">
+
+                                <canvas id="layoutCanvas" onclick="imageClicked()"></canvas>
+                                <script>
+                                    var img = new Image();
+                                    img.src = "../Public/Layouts/Plant51.png";
+                                    var canvas = document.getElementById("layoutCanvas");
+
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+
+                                    var ctx = canvas.getContext('2d');
+                                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                                    var plant = 51;
+                                    var loadLayout = (p) => {
+                                        img.src = "../Public/Layouts/Plant" + p + ".png";
+                                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                                        plant = p;
+                                    };
+
+                                    var imageClicked = () => {
+                                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                                        let x = event.offsetX;
+                                        let y = event.offsetY;
+                                        console.log(x + ", " + y);
+                                        document.getElementById('location2').value = plant + "-" + x + "-" + y;
+
+                                        ctx.fillStyle = "red";
+                                        ctx.beginPath();
+                                        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                                        ctx.fill();
+                                    };
+                                </script>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group" ng-class="{ 'has-error' : foreignForm.no_parte.$invalid && !foreignForm.no_parte.$pristine }">
+                                            <label># Parte</label>
+                                            <input type="text" class="form-control width-box" name="no_parte" ng-model="no_parte" required />
+                                            <p ng-show="foreignForm.no_parte.$invalid && !foreignForm.no_parte.$pristine" class="text-danger">Campo Obligatorio.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label># Factura</label>
+                                            <input type="text" class="form-control width-box" name="factura" ng-model="no_factura" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Fecha</label>
+                                            <input type="text" class="form-control width-box" name="fecha" ng-model="fecha" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cantidad</label>
+                                            <input type="text" class="form-control width-box" name="fecha" ng-model="cantidad" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label># ZEM</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="no_zem" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label># Ext.</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="no_ext" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Localización</label>
+                                            <input id="location2" type="text" class="form-control width-box" name="serie" ng-model="location" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="status" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Modelo</label>
+                                            <input type="text" class="form-control width-box" name="modelo" ng-model="modelo" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Serie</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="serie" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Costo Unit.</label>
+                                            <input type="text" class="form-control width-box" name="costo_unt" ng-model="costo_unit" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tipo Mcia.</label>
+                                            <input type="text" class="form-control width-box" name="costo_unt" ng-model="tipo_mcia" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Pedimento</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="pedimento" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Proveedor</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="proveedor" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Placas</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="placas" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label># Packing</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="no_packing" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Test 1</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="test1" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>División</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="division" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Comment 1</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="comment1" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Desc. esp</label>
+                                            <textarea class="form-control width-box" name="desc_es" ng-model="desc_esp"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Desc. ing</label>
+                                            <textarea class="form-control width-box" name="desc_es" ng-model="desc_ing"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </form>
+                        <div class="divAdjunto">
+                            <form id="assetImage">
+                                <div class="form-group">
+                                    <input id="asset_image" class="custom-file-input" type="file" name="asset_image" />
+                                    <label id="asset_label" for="asset_image" class="custom-file-label">Seleccionar Imagen</label>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                    <center>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-rojo" data-dismiss="modal" ng-click="cleanForeign()"><ion-icon name="ios-return-left"></ion-icon> Cerrar</button>
+                            <button type="button" class="btn btn-azul" data-dismiss="modal" ng-click="addorupdateForeign()" ng-disabled="foreignForm.$invalid"><ion-icon name="md-checkmark"></ion-icon> Guardar</button>
+                        </div>
+                    </center>
+            </div>
+
+        </div>
+    </div>
+
+    @* Caratula Modal *@
+    <div class="modal fade" id="caratulaModal" tabindex="-1" role="dialog" aria-labelledby="caratulaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="caratulaModalLabel">Información de Activo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <canvas id="caratulaCanvas"></canvas>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center card-header" scope="col">No Factura</th>
+                                <th class="text-center card-header" scope="col">Fecha de Importación</th>
+                                <th class="text-center card-header" scope="col">Costo Aduanas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">{{ asset_info.NoFactura }}</th>
+                                <th class="text-center">{{ asset_info.Fecha }}</th>
+                                <th class="text-center"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center card-header" scope="col">División</th>
+                                <th class="text-center card-header" scope="col">Nùmero de Serie</th>
+                                <th class="text-center card-header" scope="col">Pedimento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">{{ asset_info.Division }}</th>
+                                <th class="text-center">{{ asset_info.Serie }}</th>
+                                <th class="text-center">{{ asset_info.Pedimento }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center card-header" scope="col">Localización</th>
+                                <th class="text-center card-header" scope="col">Número de Activo (Mex)</th>
+                                <th class="text-center card-header" scope="col">Número de Activo (Ext)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">{{ asset_info.Location }}</th>
+                                <th class="text-center">{{ asset_info.NoZEM }}</th>
+                                <th class="text-center">{{ asset_info.NoExt }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center card-header" scope="col">Marca</th>
+                                <th class="text-center card-header" scope="col">Modelo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">{{ asset_info.Marca }}</th>
+                                <th class="text-center">{{ asset_info.Modelo }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered" style="height: 150px;">
+                        <thead>
+                            <tr>
+                                <th class="text-center card-header" scope="col">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">{{ asset_info.DescEsp }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center card-header" scope="col">Imagen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center"><img src="{{ asset_info.Image }}" height="450" /></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="layoutModal" tabindex="-1" role="dialog" aria-labelledby="layoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="layoutModalLabel">Layout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="layoutPlace"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Choose file modal *@
+    <div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="fileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fileModalLabel">Archivo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form_foreigns">
+                        <div class="divAdjunto">
+                            <div class="form-group">
+                                <input id="input_file" class="custom-file-input" type="file" id="national_data_file" name="national_data_file" />
+                                <label id="label_file" for="national_data_file" class="custom-file-label">Select File</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                    <button type="button" class="btn btn-verde" data-dismiss="modal" ng-click="uploadForeignData()"><ion-icon name="md-checkmark"></ion-icon> Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

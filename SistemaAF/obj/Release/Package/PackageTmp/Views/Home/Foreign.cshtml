@@ -1,0 +1,359 @@
+﻿
+
+<div ng-controller="foreign-controller">
+
+    @* ///////////////////////////////////// LISTA DE NUMEROS /////////////////////////////////////////////// *@
+
+    <div class="index animated fadeInDown slow">
+        <h3>Extranjeros</h3>
+        <hr />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-md-1">
+                    <ion-icon name="search" size="large"></ion-icon>
+                </div>
+                <div class="col-md-8 ">
+                    <input type="search" class="form-control width-box " placeholder="Buscar..." ng-model="search" />
+                </div>
+                <div class="col-1">
+                    <button type="button" class="btn btn-default btn-azul" data-toggle="modal" data-target="#foreignModal" ng-click="cleanForeign()">
+                        <ion-icon name="add"></ion-icon>Nuevo
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="jumbotron" style="height: 500px;">
+                    <h1>Layouts</h1>
+                    <div class="btn-group-vertical" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal">Planta 1</button>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal">Planta 2</button>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal">Planta 3</button>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layoutModal">Planta 4</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="table-responsive overflow-auto" style="height: 500px;">
+                    <table class="table table-sm table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="info-header"># Factura</th>
+                                <th class="info-header">Fecha Imp.</th>
+                                <th class="info-header">Costo Aduanas</th>
+                                <th class="info-header">División</th>
+                                <th class="info-header"># Serie</th>
+                                <th class="info-header">Pedimento</th>
+                                <th class="info-header">Localización</th>
+                                <th class="info-header"># Activo(Mex)</th>
+                                <th class="info-header"># Activo(Ext)</th>
+                                <th class="info-header">Marca</th>
+                                <th class="info-header">Modelo</th>
+                                <th class="info-header">Desc.</th>
+                                <th class="info-header"></th>
+                                <th class="info-header"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in foreigns | filter : search">
+                                <td class="info-table">
+                                    <span class="info-span">
+                                        <ion-icon name="logo-buffer"></ion-icon> {{item.no_factura}}
+                                    </span>
+                                </td>
+                                <td class="info-table">{{item.Fecha}}</td>
+                                <td class="info-table">{{item.costo_aduanas}}</td>
+                                <td class="info-table">{{item.Division}}</td>
+                                <td class="info-table">{{item.Serie}}</td>
+                                <td class="info-table">{{item.Pedimento}}</td>
+                                <td class="info-table">{{item.Location}}</td>
+                                <td class="info-table">{{item.no_activo_mex}}</td>
+                                <td class="info-table">{{item.no_activo_ext}}</td>
+                                <td class="info-table">{{item.Marca}}</td>
+                                <td class="info-table">{{item.Modelo}}</td>
+                                <td class="info-table">{{item.desc}}</td>
+                                <td>
+                                    <button class="btn-sm btn-warning" data-placement="top" title="Editar" data-toggle="modal" data-target="#foreignModal" ng-click="selectForeign(item.NoParte)">
+                                        <ion-icon name="create"></ion-icon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" ng-click="deleteForeing(item.NoParte)">
+                                        <ion-icon name="trash"></ion-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Modal -->
+
+        </div>
+    </div>
+    <div class="modal fade" id="foreignModal" tabindex="-1" role="dialog" aria-labelledby="foreignModalLabel" aria-hidden="true" autofocus>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" ng-model="modal_title" id="foreignModalLabel">+Nuevo Activo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form name="foreignForm" novalidate>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group" ng-class="{ 'has-error' : foreignForm.no_parte.$invalid && !foreignForm.no_parte.$pristine }">
+                                        <label># Parte</label>
+                                        <input type="text" class="form-control width-box" name="no_parte" ng-model="no_parte" required />
+                                        <p ng-show="foreignForm.no_parte.$invalid && !foreignForm.no_parte.$pristine" class="text-danger">Campo Obligatorio.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label># Factura</label>
+                                        <input type="text" class="form-control width-box" name="factura" ng-model="no_factura" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Fecha</label>
+                                        <input type="text" class="form-control width-box" name="fecha" ng-model="fecha" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Cantidad</label>
+                                        <input type="text" class="form-control width-box" name="fecha" ng-model="cantidad" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Costo Unit.</label>
+                                        <input type="text" class="form-control width-box" name="costo_unt" ng-model="costo_unit" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Tipo Mcia.</label>
+                                        <input type="text" class="form-control width-box" name="costo_unt" ng-model="tipo_mcia" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Cve. País</label>
+                                        <input type="text" class="form-control width-box" name="cve_pais" ng-model="cve_pais" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Desc. esp</label>
+                                        <textarea class="form-control width-box" name="desc_es" ng-model="desc_esp"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Desc. ing</label>
+                                        <textarea class="form-control width-box" name="desc_es" ng-model="desc_ing"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group" ">
+                                        <label>Marca</label>
+                                        <input type="text" class="form-control width-box" name="marca" ng-model="marca" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" ">
+                                        <label>Modelo</label>
+                                        <input type="text" class="form-control width-box" name="modelo" ng-model="modelo" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Serie</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="serie" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Fran. Mex Imp.</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="fr_mex_imp" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Clave Um.</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="cve_um" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Fam. Factur</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="fam_factur" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Pedimento</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="pedimento" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Proveedor</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="proveedor" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Etiqueta</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="eqiqueta" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Placas</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="placas" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label># Packing</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="no_packing" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Comment 1</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="comment1" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Comment 2</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="comment2" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Comment 3</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="comment3" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Tipo Imp.</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="tipo_imp" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Test 1</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="test1" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Test 2</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="test2" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>División</label>
+                                            <input type="text" class="form-control width-box" name="serie" ng-model="division" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label># ZEM</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="no_zem" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label># Ext.</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="no_ext" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Localización</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="location" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <input type="text" class="form-control width-box" name="serie" ng-model="status" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-naranja" data-dismiss="modal" ng-click="cleanForeign()"><ion-icon name="ios-return-left"></ion-icon> Cerrar</button>
+                            <button type="button" class="btn btn-default btn-azul" data-dismiss="modal" ng-click="addorupdateForeign()" ng-disabled="foreignForm.$invalid"><ion-icon name="md-checkmark"></ion-icon> Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="layoutModal" tabindex="-1" role="dialog" aria-labelledby="layoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="layoutModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img width="750" height="500" src="~/Content/images/03.jpg" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
